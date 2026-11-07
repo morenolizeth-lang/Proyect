@@ -1,0 +1,75 @@
+{
+  "feature_columns": [
+    "url_length",
+    "host_length",
+    "path_length",
+    "query_length",
+    "n_dots_url",
+    "n_hyphens_url",
+    "n_underscores_url",
+    "n_slashes_url",
+    "n_digits_url",
+    "digit_ratio_url",
+    "n_special_chars_url",
+    "n_subdomains",
+    "host_n_hyphens",
+    "host_n_digits",
+    "host_digit_ratio",
+    "has_ip_host",
+    "has_port",
+    "port_is_nonstandard",
+    "path_depth",
+    "n_query_params",
+    "has_at_symbol",
+    "has_double_slash_in_path",
+    "has_punycode",
+    "is_shortener",
+    "n_suspicious_words",
+    "has_executable_ext",
+    "risky_tld",
+    "host_entropy",
+    "url_entropy",
+    "longest_host_token",
+    "tld_length"
+  ],
+  "target_column": "is_phishing",
+  "positive_class": 1,
+  "threshold": 0.5,
+  "algorithm": "StandardScaler + LogisticRegression",
+  "random_state": 42,
+  "split": "StratifiedGroupKFold (5 folds), first fold; grouped by registered domain",
+  "dataset": "balanced_dataset_complete.csv",
+  "rows_after_cleanup": 42418,
+  "conflicting_urls_excluded": 2,
+  "train_rows": 33935,
+  "test_rows": 8483,
+  "train_domains": 26883,
+  "test_domains": 6720,
+  "train_class_counts": {
+    "0": 16968,
+    "1": 16967
+  },
+  "test_class_counts": {
+    "0": 4242,
+    "1": 4241
+  },
+  "metrics": {
+    "accuracy": 0.8567723682659436,
+    "precision_phishing": 0.9370306181398036,
+    "recall_phishing": 0.7649139353925961,
+    "f1_phishing": 0.8422692457484097,
+    "roc_auc": 0.9124731341662478,
+    "brier_score": 0.10659082567712432,
+    "confusion_matrix_labels_0_1": [
+      [
+        4024,
+        218
+      ],
+      [
+        997,
+        3244
+      ]
+    ]
+  },
+  "probability_note": "The dataset is artificially balanced; probabilities may not represent real-world phishing prevalence."
+}

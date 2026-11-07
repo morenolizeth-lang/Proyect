@@ -6,12 +6,86 @@
 <section class="hero pb-4">
     <div class="container">
         <p class="eyebrow mb-3">Application</p>
-        <h1 class="mb-3">Platform</h1>
+        <h1 class="mb-3">Check a URL</h1>
+        <p class="research-intro mb-0">
+            Check the URL against the prepared dataset and the Tranco top-20,000 domain ranking.
+        </p>
     </div>
 </section>
 <section class="content-section pt-3">
     <div class="container">
-        <div class="info-card" aria-label="Application platform content template"></div>
+        <div class="row justify-content-center g-4">
+            <div class="col-12 col-lg-8">
+                <section class="info-card" aria-labelledby="url-check-heading">
+                    <p class="eyebrow mb-2">Dataset and domain ranking</p>
+                    <h2 id="url-check-heading">Analyze a link</h2>
+                    <p>
+                        Paste a URL below to look for an exact match in
+                        <code>balanced_dataset_complete.csv</code>. If there is no exact
+                        match, the domain is checked against the first 20,000 entries in
+                        <code>top-1m.csv</code>. The application does not open the link or
+                        contact the submitted website.
+                    </p>
+                    <form method="post" action="{{ url_for('application_platform') }}">
+                        <label class="form-label fw-semibold" for="url">URL</label>
+                        <div class="input-group input-group-lg mb-3">
+                            <input
+                                class="form-control"
+                                id="url"
+                                name="url"
+                                type="text"
+                                inputmode="url"
+                                maxlength="2048"
+                                placeholder="https://example.com"
+                                value="{{ submitted_url }}"
+                                aria-describedby="url-help"
+                                required
+                            >
+                            <button class="btn btn-primary px-4" type="submit">
+                                Analyze
+                            </button>
+                        </div>
+                        <div id="url-help" class="form-text text-light">
+                            You can enter a URL with or without https://.
+                        </div>
+                    </form>
+
+                    {% if error %}
+                    <div class="alert alert-warning mt-4 mb-0" role="alert">
+                        {{ error }}
+                    </div>
+                    {% endif %}
+
+                    {% if result %}
+                    <section class="mt-4 p-4 rounded-3 border border-{{ result.level }}" aria-live="polite">
+                        <p class="eyebrow mb-2">Lookup result</p>
+                        <h3 class="h4 text-{{ result.level }}">{{ result.label }}</h3>
+                        <p class="mb-2 text-break">
+                            <strong>Analyzed URL:</strong> {{ result.normalized_url }}
+                        </p>
+                        <p class="mb-0">{{ result.message }}</p>
+                    </section>
+                    {% endif %}
+                </section>
+            </div>
+
+            <div class="col-12 col-lg-8">
+                <aside class="alert alert-warning mb-0" role="note">
+                    <strong>Popularity is not a safety guarantee.</strong>
+                    A registered label reflects the dataset. A popular domain is only a
+                    weak positive signal: a malicious link may still be hosted on it.
+                    Unknown URLs are not classified by the model. Do not enter credentials
+                    or sensitive information on unfamiliar links.
+                    {% if not reference_data_available %}
+                    <span class="d-block mt-2">
+                        The dataset or ranking file is missing. Required files:
+                        <code>static/datasets/balanced_dataset_complete.csv</code> and
+                        <code>static/datasets/top-1m.csv</code>.
+                    </span>
+                    {% endif %}
+                </aside>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}
